@@ -1,10 +1,15 @@
 import express from 'express';
 import auth from './routes/auth.js';
 import cors from 'cors';
+import dotenv from 'dotenv'
+
+dotenv.config();
 
 const app = express();
+
+console.log(process.env.FRONTEND_URL);
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: process.env.FRONTEND_URL,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
