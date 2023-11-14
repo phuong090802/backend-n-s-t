@@ -9,6 +9,7 @@ export const sendToken = (user, refreshToken, res) => {
         httpOnly: true,
         path: '/api/v1/auth',
         sameSite: 'None',
+        secure: true,
     }
     const { _id, name, email, phone } = user;
     res.cookie('refreshToken', refreshToken.token, options).json({
@@ -21,7 +22,7 @@ export const sendToken = (user, refreshToken, res) => {
 export const getRefreshToken = async (user) => {
     return await RefreshToken.create({
         token: nanoid(),
-        expires: new Date(Date.now() + Number(process.env.REFRESH_TOKEN_EXPIRES_TIME) * 24 * 60 * 60 * 1000),
+        expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_TIME * 24 * 60 * 60 * 1000),
         user
     });
 };
