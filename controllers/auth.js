@@ -20,7 +20,7 @@ export const registerUser = catchAsyncError(async (req, res, next) => {
 
 export const login = catchAsyncError(async (req, res, next) => {
     const { email, password } = req.body;
-
+    
     if (!email || !password) {
         return next(new ErrorHandler('Vui lòng nhập email và mật khẩu', 400));
     }
