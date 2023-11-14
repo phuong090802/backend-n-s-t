@@ -1,7 +1,10 @@
 import dotenv from 'dotenv';
 import dbConnect from './config/dbConnect.js';
 import errorMiddleware from './middlewares/errorMiddleware.js';
-import app from './app.js';
+import express from 'express';
+import auth from './routes/auth.js'
+import cors from 'cors';
+
 
 process.on('uncaughtException', err => {
     console.log(`error: ${err.stack}`);
@@ -13,7 +16,21 @@ dotenv.config();
 
 dbConnect();
 
+const app = express();
+
+const corsOptions = {
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 app.use(errorMiddleware);
+app.use(express.json());
+
+app.use('/api/v1/auth', auth);
+
 
 const PORT = process.env.PORT || 4000;
 

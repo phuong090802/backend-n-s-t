@@ -15,11 +15,11 @@ const refreshTokenSchema = new Schema({
         required: Date.now
     },
     parent: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'RefreshToken'
     },
-    account: {
-        type: mongoose.Schema.Types.ObjectId,
+    user: {
+        type: Schema.Types.ObjectId,
         required: [true, 'Token phải thuộc về người dùng'],
         ref: 'User'
     }

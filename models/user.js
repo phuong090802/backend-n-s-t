@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import * as validator from '../utils/validator.js';
-import bcrypt from 'bcrypt';
+import bcrypt, { compare } from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const userSchema = new Schema({
     name: {
@@ -64,5 +65,16 @@ userSchema.pre('save', async function (next) {
     }
     this.password = await bcrypt.hash(this.password, 10);
 });
+
+userSchema.methods.comparePassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+}
+
+userSchema.methods.getAccessToken = function () {
+    return jwt.sign({ id: this._id }, process.env.SECRET_KEY, {
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRES_TIME
+    });
+}
+
 
 export default model('User', userSchema);
