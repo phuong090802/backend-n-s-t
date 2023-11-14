@@ -21,7 +21,7 @@ export const sendToken = (user, refreshToken, res) => {
 export const getRefreshToken = async (user) => {
     return await RefreshToken.create({
         token: nanoid(),
-        expires: new Date(Date.now() + process.env.REFRESH_TOKEN_EXPIRES_TIME * 24 * 60 * 60 * 1000),
+        expires: new Date(Date.now() + Number(process.env.REFRESH_TOKEN_EXPIRES_TIME) * 24 * 60 * 60 * 1000),
         user
     });
 };
