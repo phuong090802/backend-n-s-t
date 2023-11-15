@@ -52,7 +52,7 @@ export const handleGetCurrentUser = catchAsyncError(async (req, res, next) => {
 export const handleLogout = catchAsyncError(async (req, res, next) => {
     const token = req.cookies.refreshToken;
     if (!token) {
-        return next(new ErrorHandler('Không đủ quyền truy cập', 400));
+        return next(new ErrorHandler('Không đủ quyền truy cập', 401));
     }
     const refreshToken = await RefreshToken.findOne({ token });
     if (refreshToken) {
@@ -69,7 +69,7 @@ export const handleLogout = catchAsyncError(async (req, res, next) => {
 export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
     const token = req.cookies.refreshToken;
     if (!token) {
-        return next(new ErrorHandler('Không đủ quyền truy cập', 400));
+        return next(new ErrorHandler('Không đủ quyền truy cập', 401));
     }
     const refreshToken = await RefreshToken.findOne({ token });
     if (!refreshToken) {
@@ -79,10 +79,10 @@ export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
             const parentToken = await RefreshToken.findById(tokenObject.p);
             const parent = parentToken.parent || parentToken._id;
             await deleteToken(parent);
-            return next(new ErrorHandler('Không đủ quyền truy cập', 400));
+            return next(new ErrorHandler('Không đủ quyền truy cập', 401));
         } catch {
             clearToken(res);
-            return next(new ErrorHandler('Không đủ quyền truy cập', 400));
+            return next(new ErrorHandler('Không đủ quyền truy cập', 401));
         }
     }
 
@@ -91,7 +91,7 @@ export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
     if (!refreshToken.status) {
         await deleteToken(parent);
         clearToken(res);
-        return next(new ErrorHandler('Không đủ quyền truy cập', 400));
+        return next(new ErrorHandler('Không đủ quyền truy cập', 401));
     }
 
     const user = await User.findById(refreshToken.user);
