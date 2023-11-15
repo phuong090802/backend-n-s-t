@@ -19,11 +19,8 @@ export const sendToken = (user, refreshToken, res) => {
     });
 }
 
-export const clearToken = () => {
-    res.cookie('refreshToken', null, {
-        expires: new Date(Date.now()),
-        httpOnly: true
-    });
+export const clearToken = (res) => {
+    res.clearCookie('refreshToken', { path: '/api/v1/auth' });
 }
 
 export const getRefreshToken = async (user) => {
@@ -48,5 +45,5 @@ export const getNextRefreshToken = async (user, parent) => {
 
 export const deleteToken = async (parent) => {
     await RefreshToken.deleteMany({ parent });
-    await RefreshToken.findByIdAndDelete(parent);
+    await RefreshToken.findByIdAndDelete({ _id: parent });
 }

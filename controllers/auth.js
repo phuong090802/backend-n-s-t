@@ -51,12 +51,15 @@ export const handleGetCurrentUser = catchAsyncError(async (req, res, next) => {
 
 export const handleLogout = catchAsyncError(async (req, res, next) => {
     const token = req.cookies.refreshToken;
+    if (!token) {
+        return next(new ErrorHandler('Không đủ quyền truy cập', 400));
+    }
     const refreshToken = await RefreshToken.findOne({ token });
     if (refreshToken) {
         const parent = refreshToken.parent || refreshToken._id;
         await deleteToken(parent);
     }
-    clearToken();
+    clearToken(res);
     res.json({
         success: true,
         message: 'Đăng xuất thành công'
@@ -65,17 +68,20 @@ export const handleLogout = catchAsyncError(async (req, res, next) => {
 
 export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
     const token = req.cookies.refreshToken;
+    if (!token) {
+        return next(new ErrorHandler('Không đủ quyền truy cập', 400));
+    }
     const refreshToken = await RefreshToken.findOne({ token });
     if (!refreshToken) {
         try {
-            const token = Buffer.from(token, 'base64url').toString();
-            const tokenObj = JSON.parse(token);
-            const parentToken = await RefreshToken.findById(tokenObj.p);
+            const tokenEncoded = Buffer.from(token, 'base64url').toString();
+            const tokenObject = JSON.parse(tokenEncoded);
+            const parentToken = await RefreshToken.findById(tokenObject.p);
             const parent = parentToken.parent || parentToken._id;
             await deleteToken(parent);
             return next(new ErrorHandler('Không đủ quyền truy cập', 400));
-        } catch (err) {
-            clearToken();
+        } catch {
+            clearToken(res);
             return next(new ErrorHandler('Không đủ quyền truy cập', 400));
         }
     }
@@ -84,17 +90,15 @@ export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
     const parent = refreshToken.parent || refreshToken._id;
     if (!refreshToken.status) {
         await deleteToken(parent);
-        clearToken();
+        clearToken(res);
+        return next(new ErrorHandler('Không đủ quyền truy cập', 400));
     }
 
     const user = await User.findById(refreshToken.user);
-    await RefreshToken.findByIdAndUpdate(refreshToken._id, { status: false });
+    if (!refreshToken.hasOwnProperty('parent')) {
+        await RefreshToken.findByIdAndUpdate(refreshToken._id, { status: false });
+    }
     const nextRefreshToken = await getNextRefreshToken(user._id, parent);
     sendToken(user, nextRefreshToken, res);
-
-    res.json({
-        success: true,
-        message: 'Làm mới token thành công'
-    })
 });
 
