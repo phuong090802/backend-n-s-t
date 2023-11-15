@@ -1,6 +1,6 @@
 import User from '../models/user.js';
 import catchAsyncError from '../middlewares/catchAsyncErrors.js';
-import { sendToken, getRefreshToken } from '../utils/tokenUtils.js';
+import { sendToken, getRefreshToken, deleteToken } from '../utils/tokenUtils.js';
 import ErrorHandler from '../utils/errorHandler.js';
 
 export const registerUser = catchAsyncError(async (req, res, next) => {
@@ -49,8 +49,9 @@ export const currentUser = catchAsyncError(async (req, res, next) => {
 });
 
 export const logout = catchAsyncError(async (req, res, next) => {
+    const token = req.cookies.refreshToken;
+    await deleteToken(token);
     res.clearCookie('refreshToken', { path: '/api/v1/auth' });
-
     res.json({
         success: true,
         message: 'Đăng xuất thành công'

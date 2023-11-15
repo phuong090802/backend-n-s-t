@@ -38,3 +38,12 @@ export const getNextRefreshToken = async (user, parent) => {
         parent
     });
 };
+
+export const deleteToken = async (token) => {
+    const refreshToken = await RefreshToken.findOne({ token });
+    if (refreshToken) {
+        const parent = refreshToken.parent || refreshToken._id;
+        await RefreshToken.deleteMany({ parent });
+        await RefreshToken.findByIdAndDelete(parent);
+    }
+}

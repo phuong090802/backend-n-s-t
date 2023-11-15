@@ -1,6 +1,7 @@
 import express from 'express';
 import auth from './routes/auth.js';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 const corsOptions = {
     origin: process.env.FRONTEND_URL,
@@ -12,6 +13,8 @@ const corsOptions = {
 const app = express();
 
 app.use(cors(corsOptions));
+
+app.use(cookieParser());
 
 app.use(express.json());
 
