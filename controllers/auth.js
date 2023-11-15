@@ -97,8 +97,10 @@ export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
     const user = await User.findById(refreshToken.user);
     if (!refreshToken.hasOwnProperty('parent')) {
         await RefreshToken.findByIdAndUpdate(refreshToken._id, { status: false });
-        await RefreshToken.deleteMany({ parent: refreshToken._id });
+
     }
+    await RefreshToken.deleteMany({ parent });
+
     const nextRefreshToken = await getNextRefreshToken(user._id, parent);
     sendToken(user, nextRefreshToken, res);
 });
