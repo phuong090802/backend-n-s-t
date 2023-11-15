@@ -19,6 +19,13 @@ export const sendToken = (user, refreshToken, res) => {
     });
 }
 
+export const clearToken = () => {
+    res.cookie('refreshToken', null, {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    });
+}
+
 export const getRefreshToken = async (user) => {
     return await RefreshToken.create({
         token: nanoid(),
@@ -39,11 +46,7 @@ export const getNextRefreshToken = async (user, parent) => {
     });
 };
 
-export const deleteToken = async (token) => {
-    const refreshToken = await RefreshToken.findOne({ token });
-    if (refreshToken) {
-        const parent = refreshToken.parent || refreshToken._id;
-        await RefreshToken.deleteMany({ parent });
-        await RefreshToken.findByIdAndDelete(parent);
-    }
+export const deleteToken = async (parent) => {
+    await RefreshToken.deleteMany({ parent });
+    await RefreshToken.findByIdAndDelete(parent);
 }

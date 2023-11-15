@@ -1,9 +1,10 @@
 import express from 'express';
 import {
-    registerUser,
-    login,
-    currentUser,
-    logout
+    handleRegister,
+    handleLogin,
+    handleGetCurrentUser,
+    handleLogout,
+    handleRefreshToken,
 } from '../controllers/auth.js';
 import {
     isAuthenticatedUser,
@@ -12,9 +13,10 @@ import {
 
 const router = express.Router();
 
-router.post('/register', registerUser);
-router.post('/login', login);
-router.get('/me', isAuthenticatedUser, authorizeRoles('user', 'admin'), currentUser);
-router.post('/logout', logout);
+router.post('/register', handleRegister);
+router.post('/login', handleLogin);
+router.get('/me', isAuthenticatedUser, authorizeRoles('user', 'admin'), handleGetCurrentUser);
+router.post('/logout', handleLogout);
+router.post('/refresh-token', handleRefreshToken);
 
 export default router;
