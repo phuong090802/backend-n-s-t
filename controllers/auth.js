@@ -20,7 +20,7 @@ export const registerUser = catchAsyncError(async (req, res, next) => {
 
 export const login = catchAsyncError(async (req, res, next) => {
     const { email, password } = req.body;
-    
+
     if (!email || !password) {
         return next(new ErrorHandler('Vui lòng nhập email và mật khẩu', 400));
     }
@@ -37,4 +37,13 @@ export const login = catchAsyncError(async (req, res, next) => {
     }
     const token = await getRefreshToken(user);
     sendToken(user, token, res);
+});
+
+export const currentUser = catchAsyncError(async (req, res, next) => {
+    const user = await User.findById(req.user.id);
+    const { _id, name, email, phone, role } = user;
+    res.json({
+        success: true,
+        user: { _id, name, email, phone, role },
+    })
 });

@@ -51,8 +51,8 @@ const userSchema = new Schema({
                 'user'
             ],
             message: 'Role không hợp lệ',
-            default: 'user'
-        }
+        },
+        default: 'user'
     },
     isLeader: {
         type: Boolean
