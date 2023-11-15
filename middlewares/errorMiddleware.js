@@ -8,7 +8,7 @@ export default function errorMiddleware(err, req, res, next) {
     error.message = err.message;
 
     if (err.name === 'CastError') {
-        const message = `Resource not found. Invalid ${err.path}`;
+        const message = `Tài nguyên không tìm thấy. Khôp hợp lệ ${err.path}`;
         error = new ErrorHandler(message, 400);
     }
 
@@ -22,12 +22,12 @@ export default function errorMiddleware(err, req, res, next) {
     }
 
     if (err.name === 'JsonWebTokenError') {
-        const message = 'JSON Web Token is invalid. Try Again!!!';
+        const message = 'Xác thực thông thành công. Vui lòng đăng nhập lại';
         error = new ErrorHandler(message, 400);
     }
 
     if (err.name === 'TokenExpiredError') {
-        const message = 'JSON Web Token is expired. Try Again!!!';
+        const message = 'Xác thực thông thành công. Vui lòng đăng nhập lại';
         error = new ErrorHandler(message, 400);
     }
 
@@ -38,6 +38,6 @@ export default function errorMiddleware(err, req, res, next) {
 
     res.status(error.status).json({
         success: false,
-        message: error.message || 'Internal Server Error'
+        message: error.message || 'Lỗi Internal Server'
     });
 }
