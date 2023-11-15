@@ -47,3 +47,12 @@ export const currentUser = catchAsyncError(async (req, res, next) => {
         user: { _id, name, email, phone, role },
     })
 });
+
+export const logout = catchAsyncError(async (req, res, next) => {
+    res.clearCookie('refreshToken', { path: '/api/v1/auth' });
+
+    res.json({
+        success: true,
+        message: 'Đăng xuất thành công'
+    })
+});
