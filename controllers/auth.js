@@ -51,7 +51,10 @@ export const currentUser = catchAsyncError(async (req, res, next) => {
 export const logout = catchAsyncError(async (req, res, next) => {
     const token = req.cookies.refreshToken;
     await deleteToken(token);
-    res.clearCookie('refreshToken', { path: '/api/v1/auth' });
+    res.cookie('refreshToken', null, {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    });
     res.json({
         success: true,
         message: 'Đăng xuất thành công'
