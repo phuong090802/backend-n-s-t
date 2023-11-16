@@ -17,7 +17,10 @@ export default function errorMiddleware(err, req, res, next) {
         if (Object.keys(err.keyValue).includes('phone')) {
             field = 'Số điện thoại';
         }
-        const message = `${field} đã được sử dụng`;
+        if (Object.keys(err.keyValue).includes('name')) {
+            field = 'Công việc';
+        }
+        const message = `${field} đã tồn tại`;
         error = new ErrorHandler(message, 400);
     }
 
