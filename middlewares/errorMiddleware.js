@@ -35,13 +35,7 @@ export default function errorMiddleware(err, req, res, next) {
     }
 
     if (err.name === 'ValidationError') {
-        let message = '';
-        const field = err.errors.name.properties.path;
-        if (field === 'name') {
-            message = 'Tên không hợp lệ';
-        } else {
-            message = Object.values(err.errors).map(value => value.message);
-        }
+        const message = Object.values(err.errors).map(value => value.message);
         error = new ErrorHandler(message, 400);
     }
 

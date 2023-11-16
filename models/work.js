@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 const workSchema = new Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, 'Vui lòng nhập tên công việc'],
         unique: [true, 'Công việc đã tồn tại']
     },
     description: {
