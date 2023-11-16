@@ -91,7 +91,7 @@ export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
     if (!refreshToken.status) {
         await deleteToken(parent);
         clearToken(res);
-        return next(new ErrorHandler('Không đủ quyền truy cập', 401));
+        return next(new ErrorHandler('Truy cập bị không được phép', 403));
     }
 
     const user = await User.findById(refreshToken.user);
