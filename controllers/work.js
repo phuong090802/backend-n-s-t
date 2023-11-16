@@ -18,14 +18,24 @@ export const handleCreateWork = catchAsyncError(async (req, res, next) => {
 });
 
 export const handleGetAllWork = catchAsyncError(async (req, res, next) => {
-    const resPerPage = 4;
-    const apiFeatures = new APIFeatures(Work.find({ user: req.user }), req.query)
+    const size = 4;
+
+    const workQuery = Work.find({ user: req.user });
+
+    const apiFeatures = new APIFeatures(workQuery, req.query)
+        .search()
+        .filter();
+
+    let works = await apiFeatures.query;
+    const count = works.length;
+
+    const apiFeaturesPagination = new APIFeatures(Work.find(workQuery), req.query)
         .search()
         .filter()
-        .pagination(resPerPage);
+        .pagination(size);
 
-    const works = await apiFeatures.query;
-    const count = works.length;
+    works = await apiFeaturesPagination.query;
+
     res.json({
         success: true,
         works,
