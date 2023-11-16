@@ -22,13 +22,13 @@ export const handleGetAllWork = catchAsyncError(async (req, res, next) => {
     const apiFeatures = new APIFeatures(Work.find({ user: req.user }), req.query)
         .search()
         .filter()
-        // .pagination(resPerPage);
+        .pagination(resPerPage);
 
     const works = await apiFeatures.query;
-    const filteredWorksCount = works.length;
+    const count = works.length;
     res.json({
         success: true,
         works,
-        filteredWorksCount
+        count
     })
 });
