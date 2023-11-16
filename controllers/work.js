@@ -39,6 +39,7 @@ export const handleGetAllWork = catchAsyncError(async (req, res, next) => {
     res.json({
         success: true,
         works,
+        size,
         count
     })
 });
