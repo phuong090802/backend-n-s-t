@@ -37,7 +37,7 @@ export const handleLogin = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler('Email hoặc mật khẩu không hợp lệ', 401));
     }
     const token = await getRefreshToken(user);
-    sendToken(user, token, res);
+    return sendToken(user, token, res);
 });
 
 export const handleGetCurrentUser = catchAsyncError(async (req, res, next) => {
@@ -102,6 +102,6 @@ export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
     await RefreshToken.deleteMany({ parent });
 
     const nextRefreshToken = await getNextRefreshToken(user._id, parent);
-    sendToken(user, nextRefreshToken, res);
+    return sendToken(user, nextRefreshToken, res);
 });
 
