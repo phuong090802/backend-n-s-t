@@ -9,6 +9,6 @@ import {
 
 const router = express.Router();
 
-router.post('/', isAuthenticatedUser, authorizeRoles('user', 'admin'), handleUpdateProfile);
+router.put('/', isAuthenticatedUser, authorizeRoles('user', 'admin'), handleUpdateProfile);
 
 export default router;
