@@ -54,7 +54,7 @@ const userSchema = new Schema({
         },
         default: 'user'
     },
-    image: {
+    avatar: {
         publicId: {
             type: String,
             required: true
