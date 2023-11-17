@@ -14,7 +14,7 @@ export const sendToken = (user, refreshToken, res) => {
     const { _id, name, email, phone, role } = user;
     res.cookie('refreshToken', refreshToken.token, options).json({
         success: true,
-        user: { _id, name, email, phone, role },
+        user: { _id, name, email, phone, role, avatar.url },
         token: token
     });
 }
