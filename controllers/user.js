@@ -22,7 +22,8 @@ export const handleUpdateProfile = catchAsyncError(async (req, res, next) => {
 
     await User.findByIdAndUpdate(req.user.id, userData, {
         runValidators: true,
-    });
+    })
+
     res.json({
         success: true,
         message: 'Cập nhật thông tin thành công'
