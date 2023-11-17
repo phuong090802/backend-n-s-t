@@ -23,9 +23,10 @@ const app = express();
 
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(fileUpload());
+
 app.use(cookieParser());
 app.use(express.json());
-app.use(fileUpload());
 
 
 app.use('/api/v1/users', user);
