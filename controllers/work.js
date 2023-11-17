@@ -56,3 +56,20 @@ export const handleGetWork = catchAsyncError(async (req, res, next) => {
         work
     })
 });
+
+export const handleUpdateWork = catchAsyncError(async (req, res, next) => {
+    const work = await Work.findById(req.params.id);
+
+    if (!work) {
+        return next(new ErrorHandler('Không tìm thấy công việc', 404));
+    }
+
+    await Work.findByIdAndUpdate(req.params.id, req.body, {
+        runValidators: true,
+    });
+
+    res.json({
+        success: true,
+        message: 'Cập nhật công việc thành công'
+    })
+});
