@@ -43,3 +43,19 @@ export const handleGetAllWork = catchAsyncError(async (req, res, next) => {
         count
     })
 });
+
+export const handleGetWork = catchAsyncError(async (req, res, next) => {
+    console.log(req.params.id);
+    const work = await Work.findById(req.params.id).select('-__v');
+
+    if (!work) {
+        return next(new ErrorHandler('Không tìm thấy công việc', 404));
+    }
+
+  
+
+    res.json({
+        success: true,
+        work
+    })
+});
