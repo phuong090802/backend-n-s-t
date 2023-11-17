@@ -22,7 +22,7 @@ const corsOptions = {
 const app = express();
 
 app.use(cors(corsOptions));
-app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
 app.use(fileUpload());
 
 app.use(cookieParser());
