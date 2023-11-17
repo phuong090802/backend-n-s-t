@@ -11,10 +11,17 @@ export const sendToken = (user, refreshToken, res) => {
         sameSite: 'None',
         secure: true,
     }
-    const { _id, name, email, phone, role } = user;
+    const userData = {
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        avatar: user.avatar.url
+    };
     res.cookie('refreshToken', refreshToken.token, options).json({
         success: true,
-        user: { _id, name, email, phone, role, avatar.url },
+        user: userData,
         token: token
     });
 }
