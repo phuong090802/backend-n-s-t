@@ -45,8 +45,7 @@ export const handleGetAllWork = catchAsyncError(async (req, res, next) => {
 });
 
 export const handleGetWork = catchAsyncError(async (req, res, next) => {
-    console.log(req.params.id);
-    const work = await Work.findById(req.params.id).select('-__v members user');
+    const work = await Work.findById(req.params.id).select('-__v -members -user');
 
     if (!work) {
         return next(new ErrorHandler('Không tìm thấy công việc', 404));
