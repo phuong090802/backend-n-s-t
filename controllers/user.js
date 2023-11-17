@@ -12,7 +12,7 @@ export const handleUpdateProfile = catchAsyncError(async (req, res, next) => {
             await cloudinary.uploader.destroy(publicId);
         }
         const result = await cloudinary.uploader.upload(req.body.avatar,
-            { folder: 'avatars', width: 512, height: 512, crop: 'scale' }
+            { folder: 'avatars', width: 512, height: 512, crop: 'scale', invalidate: true, }
         );
         userData.avatar = {
             publicId: result.public_id,
