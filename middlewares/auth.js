@@ -6,12 +6,12 @@ import catchAsyncError from './catchAsyncErrors.js';
 export const isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
 
     if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer')) {
-        return next(new ErrorHandler('Đăng nhập trước khi truy cập vào tài nguyên này', 401));
+        return next(new ErrorHandler('Đăng nhập trước khi truy cập vào tài nguyên này', 403));
     }
 
     const token = req.headers.authorization.split(' ')[1];
     if (!token) {
-        return next(new ErrorHandler('Đăng nhập trước khi truy cập vào tài nguyên này', 401));
+        return next(new ErrorHandler('Đăng nhập trước khi truy cập vào tài nguyên này', 403));
     }
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     req.user = await User.findById(decoded.id);
