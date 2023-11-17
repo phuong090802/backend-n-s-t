@@ -1,4 +1,3 @@
-import { query } from 'express';
 import catchAsyncError from '../middlewares/catchAsyncErrors.js';
 import Work from '../models/work.js';
 import APIFeatures from '../utils/APIFeatures.js';

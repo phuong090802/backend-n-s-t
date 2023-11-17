@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 import dbConnect from './config/dbConnect.js';
 import errorMiddleware from './middlewares/errorMiddleware.js';
 import app from './app.js';
+import { v2 as cloudinary } from 'cloudinary';
+
 
 
 process.on('uncaughtException', err => {
@@ -11,6 +13,13 @@ process.on('uncaughtException', err => {
 });
 
 dotenv.config();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    secure: true
+});
 
 dbConnect();
 

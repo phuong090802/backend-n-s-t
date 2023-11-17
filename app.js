@@ -1,8 +1,11 @@
 import express from 'express';
 import auth from './routes/auth.js';
 import work from './routes/work.js';
+import user from './routes/user.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import fileUpload from 'express-fileupload';
+import bodyParser from 'body-parser';
 import {
     isAuthenticatedUser,
     authorizeRoles
@@ -19,12 +22,15 @@ const corsOptions = {
 const app = express();
 
 app.use(cors(corsOptions));
-
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-
 app.use(express.json());
+app.use(fileUpload());
 
+
+app.use('/api/v1/users', user);
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/works', isAuthenticatedUser, isAuthenticatedUser, authorizeRoles('user', 'admin'), work);
+
 
 export default app;
