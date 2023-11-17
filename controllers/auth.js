@@ -42,10 +42,17 @@ export const handleLogin = catchAsyncError(async (req, res, next) => {
 
 export const handleGetCurrentUser = catchAsyncError(async (req, res, next) => {
     const user = await User.findById(req.user.id);
-    const { _id, name, email, phone, role } = user;
+    const userData = {
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        avatar: user.avatar.url
+    };
     res.json({
         success: true,
-        user: { _id, name, email, phone, role },
+        user: userData,
     })
 });
 
