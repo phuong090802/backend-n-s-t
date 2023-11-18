@@ -32,8 +32,7 @@ export const handleUpdateProfile = catchAsyncError(async (req, res, next) => {
 });
 
 export const handleUpdateEmail = catchAsyncError(async (req, res, next) => {
-
-    await User.findByIdAndUpdate(req.user.id, req.body.email, {
+    await User.findByIdAndUpdate(req.user.id, {email: req.body.email}, {
         runValidators: true,
     });
 
@@ -46,12 +45,12 @@ export const handleUpdateEmail = catchAsyncError(async (req, res, next) => {
 export const handleUpdatePassword = catchAsyncError(async (req, res, next) => {
     const user = await User.findById(req.user.id).select('+password');
 
-    const isPasswordMatched = await user.comparePassword(password);
+    const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
     if (!isPasswordMatched) {
         return next(new ErrorHandler('Mật khẩu cũ không chính xác', 400));
     }
     
-    user.password = req.body.password;
+    user.password = req.body.newPassword;
 
     await user.save();
 
