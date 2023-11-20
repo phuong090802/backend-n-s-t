@@ -61,7 +61,9 @@ const userSchema = new Schema({
         url: {
             type: String,
         },
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date
 
 }, { timestamps: true });
 
@@ -82,5 +84,11 @@ userSchema.methods.getAccessToken = function () {
     });
 }
 
+userSchema.methods.getResetPasswordToken = function () {
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.resetPasswordExpire = Date.now() + 5 * 60 * 1000;
+    return resetToken;
+}
 
 export default model('User', userSchema);
