@@ -64,7 +64,7 @@ export const handleGetCurrentUser = catchAsyncErrors(async (req, res, next) => {
 
 export const handleLogout = catchAsyncErrors(async (req, res, next) => {
     const token = req.cookies.refreshToken;
-    
+
     if (token) {
         const refreshToken = await RefreshToken.findOne({ token });
         if (refreshToken) {
@@ -72,12 +72,13 @@ export const handleLogout = catchAsyncErrors(async (req, res, next) => {
             await deleteToken(parent);
         }
     }
-    clearToken(res);
+    res.clearCookie('refreshToken', { path: '/api/v1/auth' }).json(
+        {
+            success: true,
+            message: 'Đăng xuất thành công'
+        }
+    );
 
-    res.json({
-        success: true,
-        message: 'Đăng xuất thành công'
-    })
 });
 
 export const handleRefreshToken = catchAsyncErrors(async (req, res, next) => {
