@@ -71,14 +71,14 @@ export const handleLogout = catchAsyncErrors(async (req, res, next) => {
             const parent = refreshToken.parent || refreshToken._id;
             await deleteToken(parent);
         }
-    }
-    res.clearCookie('refreshToken', { path: '/api/v1/auth' }).json(
-        {
-            success: true,
-            message: 'Đăng xuất thành công'
-        }
-    );
 
+    }
+    clearToken(res);
+
+    res.json({
+        success: true,
+        message: 'Đăng xuất thành công'
+    })
 });
 
 export const handleRefreshToken = catchAsyncErrors(async (req, res, next) => {
