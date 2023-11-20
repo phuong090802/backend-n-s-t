@@ -1,12 +1,12 @@
 import User from '../models/user.js';
-import catchAsyncError from '../middlewares/catchAsyncErrors.js';
+import catchAsyncErrors from '../middlewares/catchAsyncErrors.js';
 import { v2 as cloudinary } from 'cloudinary';
 import ErrorHandler from '../utils/errorHandler.js';
 import sendEmail from '../utils/sendEmail.js';
 import crypto from 'crypto';
 
 
-export const handleUpdateProfile = catchAsyncError(async (req, res, next) => {
+export const handleUpdateProfile = catchAsyncErrors(async (req, res, next) => {
     const userData = { name: req.body.name };
     if (req.body.avatar && req.body.avatar !== '') {
         const user = await User.findById(req.user.id);
@@ -33,7 +33,7 @@ export const handleUpdateProfile = catchAsyncError(async (req, res, next) => {
     })
 });
 
-export const handleUpdateEmail = catchAsyncError(async (req, res, next) => {
+export const handleUpdateEmail = catchAsyncErrors(async (req, res, next) => {
     await User.findByIdAndUpdate(req.user.id, { email: req.body.email }, {
         runValidators: true,
     });
@@ -44,7 +44,7 @@ export const handleUpdateEmail = catchAsyncError(async (req, res, next) => {
     })
 });
 
-export const handleUpdatePassword = catchAsyncError(async (req, res, next) => {
+export const handleUpdatePassword = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.user.id).select('+password');
 
     const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
@@ -62,7 +62,7 @@ export const handleUpdatePassword = catchAsyncError(async (req, res, next) => {
     });
 });
 
-export const handleForgotPassword = catchAsyncError(async (req, res, next) => {
+export const handleForgotPassword = catchAsyncErrors(async (req, res, next) => {
 
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
@@ -96,7 +96,7 @@ export const handleForgotPassword = catchAsyncError(async (req, res, next) => {
 
 });
 
-export const handleResetPassword = catchAsyncError(async (req, res, next) => {
+export const handleResetPassword = catchAsyncErrors(async (req, res, next) => {
     const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
     const user = await User.findOne({
         resetPasswordToken,

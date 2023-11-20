@@ -1,9 +1,9 @@
 import ErrorHandler from '../utils/errorHandler.js';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
-import catchAsyncError from './catchAsyncErrors.js';
+import catchAsyncErrors from './catchAsyncErrors.js';
 
-export const isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
+export const isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
 
     if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer')) {
         return next(new ErrorHandler('Đăng nhập trước khi truy cập vào tài nguyên này', 403));

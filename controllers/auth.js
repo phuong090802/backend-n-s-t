@@ -1,5 +1,5 @@
 import User from '../models/user.js';
-import catchAsyncError from '../middlewares/catchAsyncErrors.js';
+import catchAsyncErrors from '../middlewares/catchAsyncErrors.js';
 import {
     sendToken,
     getRefreshToken,
@@ -10,7 +10,7 @@ import {
 import ErrorHandler from '../utils/errorHandler.js';
 import RefreshToken from '../models/refreshToken.js';
 
-export const handleRegister = catchAsyncError(async (req, res, next) => {
+export const handleRegister = catchAsyncErrors(async (req, res, next) => {
     const { name, email, password } = req.body;
 
     await User.create({
@@ -25,7 +25,7 @@ export const handleRegister = catchAsyncError(async (req, res, next) => {
     })
 });
 
-export const handleLogin = catchAsyncError(async (req, res, next) => {
+export const handleLogin = catchAsyncErrors(async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -47,7 +47,7 @@ export const handleLogin = catchAsyncError(async (req, res, next) => {
     return sendToken(user, token, res);
 });
 
-export const handleGetCurrentUser = catchAsyncError(async (req, res, next) => {
+export const handleGetCurrentUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.user.id);
     const userData = {
         _id: user.id,
@@ -62,7 +62,7 @@ export const handleGetCurrentUser = catchAsyncError(async (req, res, next) => {
     })
 });
 
-export const handleLogout = catchAsyncError(async (req, res, next) => {
+export const handleLogout = catchAsyncErrors(async (req, res, next) => {
     const token = req.cookies.refreshToken;
 
     if (token) {
@@ -80,7 +80,7 @@ export const handleLogout = catchAsyncError(async (req, res, next) => {
     })
 });
 
-export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
+export const handleRefreshToken = catchAsyncErrors(async (req, res, next) => {
 
     const token = req.cookies.refreshToken;
     if (!token) {

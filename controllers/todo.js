@@ -1,8 +1,8 @@
-import catchAsyncError from '../middlewares/catchAsyncErrors.js';
+import catchAsyncErrors from '../middlewares/catchAsyncErrors.js';
 import Todo from '../models/todo.js';
 import APIFeatures from '../utils/APIFeatures.js';
 
-export const handleCreateTodo = catchAsyncError(async (req, res, next) => {
+export const handleCreateTodo = catchAsyncErrors(async (req, res, next) => {
     const { name, description } = req.body;
     await Todo.create({
         name,
@@ -16,7 +16,7 @@ export const handleCreateTodo = catchAsyncError(async (req, res, next) => {
     })
 });
 
-export const handleGetAllTodo = catchAsyncError(async (req, res, next) => {
+export const handleGetAllTodo = catchAsyncErrors(async (req, res, next) => {
     const size = 4;
 
     const todoQuery = Todo.find({ user: req.user });
@@ -43,7 +43,7 @@ export const handleGetAllTodo = catchAsyncError(async (req, res, next) => {
     })
 });
 
-export const handleGetTodo = catchAsyncError(async (req, res, next) => {
+export const handleGetTodo = catchAsyncErrors(async (req, res, next) => {
     const todo = await Todo.findById(req.params.id).select('-__v');
 
     if (!todo) {
@@ -56,7 +56,7 @@ export const handleGetTodo = catchAsyncError(async (req, res, next) => {
     })
 });
 
-export const handleUpdateTodo = catchAsyncError(async (req, res, next) => {
+export const handleUpdateTodo = catchAsyncErrors(async (req, res, next) => {
     const todo = await Todo.findById(req.params.id);
 
     if (!todo) {
@@ -73,7 +73,7 @@ export const handleUpdateTodo = catchAsyncError(async (req, res, next) => {
     })
 });
 
-export const handleUpdateStatusTodo = catchAsyncError(async (req, res, next) => {
+export const handleUpdateStatusTodo = catchAsyncErrors(async (req, res, next) => {
     const todo = await Todo.findById(req.params.id);
 
     if (!todo) {
@@ -88,4 +88,16 @@ export const handleUpdateStatusTodo = catchAsyncError(async (req, res, next) => 
         success: true,
         message: 'Cập nhật trạng thái công việc thành công'
     })
+});
+
+export const handleDeleteToDo = catchAsyncErrors(async (req, res, next) => {
+    const todo = await Todo.findById(req.params.id);
+    if (!todo) {
+        return next(new ErrorHandler('Không tìm thấy công việc', 404));
+    }
+    await product.deleteOne();
+    res.json({
+        success: true,
+        message: 'Xóa công việc thành công'
+    });
 });
