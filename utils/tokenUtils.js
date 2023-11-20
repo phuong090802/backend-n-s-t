@@ -29,9 +29,6 @@ export const clearToken = (res) => {
     res.cookie('token', null, {
         expires: new Date(Date.now()),
         httpOnly: true,
-        path: '/api/v1/auth',
-        sameSite: 'None',
-        secure: true
     });
 }
 
