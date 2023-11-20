@@ -1,11 +1,18 @@
 import User from '../models/user.js';
 import catchAsyncError from '../middlewares/catchAsyncErrors.js';
-import { sendToken, getRefreshToken, deleteToken, clearToken, getNextRefreshToken } from '../utils/tokenUtils.js';
+import {
+    sendToken,
+    getRefreshToken,
+    deleteToken,
+    clearToken,
+    getNextRefreshToken
+} from '../utils/tokenUtils.js';
 import ErrorHandler from '../utils/errorHandler.js';
 import RefreshToken from '../models/refreshToken.js';
 
 export const handleRegister = catchAsyncError(async (req, res, next) => {
     const { name, email, phone, password } = req.body;
+
     await User.create({
         name,
         email,
@@ -37,6 +44,7 @@ export const handleLogin = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler('Email hoặc mật khẩu không hợp lệ', 401));
     }
     const token = await getRefreshToken(user);
+
     return sendToken(user, token, res);
 });
 
@@ -58,15 +66,16 @@ export const handleGetCurrentUser = catchAsyncError(async (req, res, next) => {
 
 export const handleLogout = catchAsyncError(async (req, res, next) => {
     const token = req.cookies.refreshToken;
-    if (!token) {
-        return next(new ErrorHandler('Không đủ quyền truy cập', 401));
+
+    if (token) {
+        const refreshToken = await RefreshToken.findOne({ token });
+        if (refreshToken) {
+            const parent = refreshToken.parent || refreshToken._id;
+            await deleteToken(parent);
+        }
+        clearToken(res);
     }
-    const refreshToken = await RefreshToken.findOne({ token });
-    if (refreshToken) {
-        const parent = refreshToken.parent || refreshToken._id;
-        await deleteToken(parent);
-    }
-    clearToken(res);
+
     res.json({
         success: true,
         message: 'Đăng xuất thành công'
@@ -74,11 +83,14 @@ export const handleLogout = catchAsyncError(async (req, res, next) => {
 });
 
 export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
+   
     const token = req.cookies.refreshToken;
     if (!token) {
-        return next(new ErrorHandler('Truy cập bị không được phép', 403));
+        return next(new ErrorHandler('Yêu cầu không hợp lệ', 400));
     }
+   
     const refreshToken = await RefreshToken.findOne({ token });
+    
     if (!refreshToken) {
         try {
             const tokenEncoded = Buffer.from(token, 'base64url').toString();
@@ -86,10 +98,10 @@ export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
             const parentToken = await RefreshToken.findById(tokenObject.p);
             const parent = parentToken.parent || parentToken._id;
             await deleteToken(parent);
-            return next(new ErrorHandler('Truy cập bị không được phép', 403));
+            return next(new ErrorHandler('Yêu cầu không hợp lệ', 400));
         } catch {
             clearToken(res);
-            return next(new ErrorHandler('Truy cập bị không được phép', 403));
+            return next(new ErrorHandler('Yêu cầu không hợp lệ', 400));
         }
     }
 
@@ -98,17 +110,18 @@ export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
     if (!refreshToken.status) {
         await deleteToken(parent);
         clearToken(res);
-        return next(new ErrorHandler('Truy cập bị không được phép', 403));
+        return next(new ErrorHandler('Yêu cầu không hợp lệ', 400));
     }
 
     const user = await User.findById(refreshToken.user);
-    if (!refreshToken.hasOwnProperty('parent')) {
+    if (refreshToken.parent == null) {
         await RefreshToken.findByIdAndUpdate(refreshToken._id, { status: false });
 
     }
     await RefreshToken.deleteMany({ parent });
 
     const nextRefreshToken = await getNextRefreshToken(user._id, parent);
+    
     return sendToken(user, nextRefreshToken, res);
 });
 

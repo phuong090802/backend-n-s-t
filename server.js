@@ -1,9 +1,8 @@
 import dotenv from 'dotenv';
-import dbConnect from './config/dbConnect.js';
+import dbConnection from './config/dbConnection.js';
 import errorMiddleware from './middlewares/errorMiddleware.js';
 import app from './app.js';
 import { v2 as cloudinary } from 'cloudinary';
-
 
 
 process.on('uncaughtException', err => {
@@ -21,12 +20,12 @@ cloudinary.config({
     secure: true
 });
 
-dbConnect();
+await dbConnection();
 
 app.use(errorMiddleware);
 
 const server = app.listen(process.env.PORT, () => {
-    console.log(`Server started on PORT: ${process.env.PORT}`);
+    console.log(`Server chạy ở PORT: ${process.env.PORT}`);
 });
 
 process.on('unhandledRejection', err => {

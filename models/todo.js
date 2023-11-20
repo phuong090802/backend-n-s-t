@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const workSchema = new Schema({
+const todoSchema = new Schema({
     name: {
         type: String,
         required: [true, 'Vui lòng nhập tên công việc'],
@@ -13,16 +13,11 @@ const workSchema = new Schema({
         type: Boolean,
         default: false
     },
-    members: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }],
     user: {
         type: Schema.Types.ObjectId,
-        required: [true, 'Công việc phải thuộc về người dùng'],
+        required: [true, 'Thiếu thông tin người dùng'],
         ref: 'User'
     }
 }, { timestamps: true });
 
-export default model('Work', workSchema);
+export default model('Todo', todoSchema);

@@ -1,6 +1,6 @@
 import express from 'express';
 import auth from './routes/auth.js';
-import work from './routes/work.js';
+import todo from './routes/todo.js';
 import user from './routes/user.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -31,7 +31,7 @@ app.use(cookieParser());
 
 app.use('/api/v1/users', user);
 app.use('/api/v1/auth', auth);
-app.use('/api/v1/works', isAuthenticatedUser, isAuthenticatedUser, authorizeRoles('user', 'admin'), work);
+app.use('/api/v1/todos', isAuthenticatedUser, isAuthenticatedUser, authorizeRoles('user', 'admin'), todo);
 
 
 export default app;

@@ -51,7 +51,7 @@ const userSchema = new Schema({
                 'admin',
                 'user'
             ],
-            message: 'Role không hợp lệ',
+            message: 'Quyền truy cập không hợp lệ',
         },
         default: 'user'
     },

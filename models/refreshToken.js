@@ -4,7 +4,7 @@ const refreshTokenSchema = new Schema({
     token: {
         type: String,
         required: true,
-        unique: [true, 'Token phải là duy nhất']
+        unique: [true, 'Token phải bị trùng']
     },
     status: {
         type: Boolean,
@@ -20,7 +20,7 @@ const refreshTokenSchema = new Schema({
     },
     user: {
         type: Schema.Types.ObjectId,
-        required: [true, 'Token phải thuộc về người dùng'],
+        required: [true, 'Thiếu thông tin người dùng'],
         ref: 'User'
     }
 }, { collection: 'refresh-tokens', timestamps: true });
