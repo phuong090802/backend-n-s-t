@@ -26,10 +26,7 @@ export const sendToken = (user, refreshToken, res) => {
 }
 
 export const clearToken = (res) => {
-    res.cookie('token', null, {
-        expires: new Date(Date.now()),
-        httpOnly: true,
-    });
+    res.clearCookie('refreshToken', { path: '/api/v1/auth' });
 }
 
 export const getRefreshToken = async (user) => {
