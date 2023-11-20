@@ -11,12 +11,11 @@ import ErrorHandler from '../utils/errorHandler.js';
 import RefreshToken from '../models/refreshToken.js';
 
 export const handleRegister = catchAsyncError(async (req, res, next) => {
-    const { name, email, phone, password } = req.body;
+    const { name, email, password } = req.body;
 
     await User.create({
         name,
         email,
-        phone,
         password,
     });
 
@@ -54,7 +53,6 @@ export const handleGetCurrentUser = catchAsyncError(async (req, res, next) => {
         _id: user.id,
         name: user.name,
         email: user.email,
-        phone: user.phone,
         role: user.role,
         avatar: user.avatar.url
     };
@@ -83,14 +81,14 @@ export const handleLogout = catchAsyncError(async (req, res, next) => {
 });
 
 export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
-   
+
     const token = req.cookies.refreshToken;
     if (!token) {
         return next(new ErrorHandler('Yêu cầu không hợp lệ', 400));
     }
-   
+
     const refreshToken = await RefreshToken.findOne({ token });
-    
+
     if (!refreshToken) {
         try {
             const tokenEncoded = Buffer.from(token, 'base64url').toString();
@@ -121,7 +119,7 @@ export const handleRefreshToken = catchAsyncError(async (req, res, next) => {
     await RefreshToken.deleteMany({ parent });
 
     const nextRefreshToken = await getNextRefreshToken(user._id, parent);
-    
+
     return sendToken(user, nextRefreshToken, res);
 });
 

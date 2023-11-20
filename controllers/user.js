@@ -7,7 +7,7 @@ import crypto from 'crypto';
 
 
 export const handleUpdateProfile = catchAsyncError(async (req, res, next) => {
-    const userData = { name: req.body.name, phone: req.body.phone };
+    const userData = { name: req.body.name };
     if (req.body.avatar && req.body.avatar !== '') {
         const user = await User.findById(req.user.id);
         const publicId = user.avatar.publicId;

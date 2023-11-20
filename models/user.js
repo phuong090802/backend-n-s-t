@@ -20,16 +20,6 @@ const userSchema = new Schema({
             message: 'Vui lòng nhập email hợp lệ'
         }
     },
-    phone: {
-        type: String,
-        required: [true, 'Vui lòng nhập số điện thoại'],
-        maxLength: [11, 'Số điện thoại không được vượt quá 11 ký tự'],
-        unique: true,
-        validate: {
-            validator: validator.isPhone,
-            message: 'Vui lòng nhập số điện thoại hợp lệ'
-        }
-    },
     password: {
         type: String,
         required: [true, 'Vui lòng nhập mật khẩu'],
