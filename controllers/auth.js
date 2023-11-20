@@ -71,8 +71,8 @@ export const handleLogout = catchAsyncErrors(async (req, res, next) => {
             const parent = refreshToken.parent || refreshToken._id;
             await deleteToken(parent);
         }
-        clearToken(res);
     }
+    clearToken(res);
 
     res.json({
         success: true,
