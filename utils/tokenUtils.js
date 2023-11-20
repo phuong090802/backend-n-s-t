@@ -26,7 +26,12 @@ export const sendToken = (user, refreshToken, res) => {
 }
 
 export const clearToken = (res) => {
-    res.clearCookie('refreshToken', { path: '/api/v1/auth'});
+    res.clearCookie('refreshToken', {
+        path: '/api/v1/auth',
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
+    });
 }
 
 export const getRefreshToken = async (user) => {
