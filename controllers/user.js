@@ -32,7 +32,7 @@ export const handleUpdateProfile = catchAsyncError(async (req, res, next) => {
 });
 
 export const handleUpdateEmail = catchAsyncError(async (req, res, next) => {
-    await User.findByIdAndUpdate(req.user.id, {email: req.body.email}, {
+    await User.findByIdAndUpdate(req.user.id, { email: req.body.email }, {
         runValidators: true,
     });
 
@@ -49,11 +49,37 @@ export const handleUpdatePassword = catchAsyncError(async (req, res, next) => {
     if (!isPasswordMatched) {
         return next(new ErrorHandler('Mật khẩu cũ không chính xác', 400));
     }
-    
+
     user.password = req.body.newPassword;
 
     await user.save();
 
+    res.json({
+        success: true,
+        message: 'Cập nhật mật khẩu thành công'
+    });
+});
+
+export const resetPassword = catchAsyncError(async (req, res, next) => {
+    const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+        return next(new ErrorHandler('Mật khẩu phục hồi không hợp lệ hoặc hết hạn', 400));
+    }
+
+    if (req.body.password !== req.body.confirmPassword) {
+        return next(new ErrorHandler('Mật khẩu không khớp', 400));
+    }
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
     res.json({
         success: true,
         message: 'Cập nhật mật khẩu thành công'
