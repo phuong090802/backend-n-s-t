@@ -1,7 +1,8 @@
 import { Schema, model } from 'mongoose';
 import * as validator from '../utils/validator.js';
-import bcrypt, { compare } from 'bcrypt';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 const userSchema = new Schema({
     name: {

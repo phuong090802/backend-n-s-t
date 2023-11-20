@@ -3,6 +3,7 @@ import catchAsyncError from '../middlewares/catchAsyncErrors.js';
 import { v2 as cloudinary } from 'cloudinary';
 import ErrorHandler from '../utils/errorHandler.js';
 import sendEmail from '../utils/sendEmail.js';
+import crypto from 'crypto';
 
 
 export const handleUpdateProfile = catchAsyncError(async (req, res, next) => {
