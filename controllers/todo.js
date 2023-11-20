@@ -72,3 +72,20 @@ export const handleUpdateTodo = catchAsyncError(async (req, res, next) => {
         message: 'Cập nhật công việc thành công'
     })
 });
+
+export const handleUpdateStatusTodo = catchAsyncError(async (req, res, next) => {
+    const todo = await Todo.findById(req.params.id);
+
+    if (!todo) {
+        return next(new ErrorHandler('Không tìm thấy công việc', 404));
+    }
+
+    await Todo.findByIdAndUpdate(req.params.id, { status: req.body.status }, {
+        runValidators: true,
+    });
+
+    res.json({
+        success: true,
+        message: 'Cập nhật trạng thái công việc thành công'
+    })
+});

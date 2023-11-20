@@ -69,7 +69,7 @@ export const handleForgotPassword = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler('Không tìm thấy người dùng', 404));
     }
 
-    const resetToken = user.getResetPasswordToken();
+    const resetToken = user.getTokenResetPassword();
     await user.save({ validateBeforeSave: false });
 
 
