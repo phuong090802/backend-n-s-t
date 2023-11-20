@@ -80,7 +80,7 @@ export const handleUpdateStatusTodo = catchAsyncError(async (req, res, next) => 
         return next(new ErrorHandler('Không tìm thấy công việc', 404));
     }
 
-    await Todo.findByIdAndUpdate(req.params.id, { status: req.body.status }, {
+    await Todo.findByIdAndUpdate(req.params.id, { status: !todo.status }, {
         runValidators: true,
     });
 
