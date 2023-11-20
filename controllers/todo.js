@@ -95,7 +95,7 @@ export const handleDeleteToDo = catchAsyncErrors(async (req, res, next) => {
     if (!todo) {
         return next(new ErrorHandler('Không tìm thấy công việc', 404));
     }
-    await product.deleteOne();
+    await todo.deleteOne();
     res.json({
         success: true,
         message: 'Xóa công việc thành công'
