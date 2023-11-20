@@ -64,7 +64,7 @@ export const handleGetCurrentUser = catchAsyncErrors(async (req, res, next) => {
 
 export const handleLogout = catchAsyncErrors(async (req, res, next) => {
     const token = req.cookies.refreshToken;
-
+    
     if (token) {
         const refreshToken = await RefreshToken.findOne({ token });
         if (refreshToken) {
