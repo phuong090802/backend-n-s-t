@@ -9,7 +9,7 @@ export default function errorMiddleware(err, req, res, next) {
     error.message = err.message;
 
     if (err.name === 'CastError') {
-        const message = `Tài nguyên không tìm thấy. Khôp hợp lệ ${err.path}`;
+        const message = `Tài nguyên không tìm thấy. Không hợp lệ ${err.path}`;
         error = new ErrorHandler(message, 400);
     }
 

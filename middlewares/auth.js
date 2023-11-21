@@ -26,3 +26,10 @@ export const authorizeRoles = (...roles) => {
         next();
     }
 }
+
+export const isAdmin = (req, res, next) => {
+    if (req.user.id === req.params.id) {
+        return next(new ErrorHandler('Thao tác không hợp lệ', 400));
+    }
+    next();
+}

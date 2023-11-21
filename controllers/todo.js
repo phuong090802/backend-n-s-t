@@ -1,6 +1,6 @@
 import catchAsyncErrors from '../middlewares/catchAsyncErrors.js';
 import Todo from '../models/todo.js';
-import APIFeatures from '../utils/APIFeatures.js';
+import { ToDoAPIFeatures } from '../utils/APIFeatures.js';
 
 export const handleCreateTodo = catchAsyncErrors(async (req, res, next) => {
     const { name, description } = req.body;
@@ -21,14 +21,14 @@ export const handleGetAllTodo = catchAsyncErrors(async (req, res, next) => {
 
     const todoQuery = Todo.find({ user: req.user });
 
-    const apiFeatures = new APIFeatures(todoQuery, req.query)
+    const apiFeatures = new ToDoAPIFeatures(todoQuery, req.query)
         .search()
         .filter();
 
     let todos = await apiFeatures.query;
     const count = todos.length;
 
-    const apiFeaturesPagination = new APIFeatures(Todo.find(todoQuery), req.query)
+    const apiFeaturesPagination = new ToDoAPIFeatures(Todo.find(todoQuery), req.query)
         .search()
         .filter()
         .pagination(size);
