@@ -1,6 +1,7 @@
 import User from '../models/user.js';
 import catchAsyncErrors from '../middlewares/catchAsyncErrors.js';
 import { UserAPIFeatures } from '../utils/APIFeatures.js';
+import Todo from '../models/todo.js';
 
 
 export const handleGetUser = catchAsyncErrors(async (req, res, next) => {
@@ -28,6 +29,7 @@ export const handleGetUser = catchAsyncErrors(async (req, res, next) => {
 
 export const handleDeleteUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.params.id);
+    await Todo.deleteMany({ user });
     if (!user) {
         return next(new ErrorHandler('Không tìm thấy người dùng', 404));
     }
