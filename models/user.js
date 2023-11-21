@@ -26,14 +26,6 @@ const userSchema = new Schema({
         minLength: [6, 'Mật khẩu phải dài hơn 6 ký tự'],
         select: false
     },
-    avatar: {
-        blobId: {
-            type: String
-        },
-        url: {
-            type: String,
-        }
-    },
     role: {
         type: String,
         enum: {
