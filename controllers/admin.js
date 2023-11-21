@@ -58,7 +58,7 @@ export const handleGetAllUser = catchAsyncErrors(async (req, res, next) => {
 
     res.json({
         success: true,
-        todos: users,
+        users,
         size,
         count
     })
