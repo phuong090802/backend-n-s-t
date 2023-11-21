@@ -49,6 +49,9 @@ export const handleLogin = catchAsyncErrors(async (req, res, next) => {
 
 export const handleGetCurrentUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.user.id);
+    if (!user) {
+        return next(new ErrorHandler('Không tìm thấy người dùng', 404));
+    }
     const userData = {
         _id: user.id,
         name: user.name,

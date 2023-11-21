@@ -29,10 +29,10 @@ export const handleGetUser = catchAsyncErrors(async (req, res, next) => {
 
 export const handleDeleteUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.params.id);
-    await Todo.deleteMany({ user });
     if (!user) {
         return next(new ErrorHandler('Không tìm thấy người dùng', 404));
     }
+    await Todo.deleteMany({ user });
     await user.deleteOne();
     res.json({
         success: true,

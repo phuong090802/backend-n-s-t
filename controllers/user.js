@@ -10,6 +10,10 @@ export const handleUpdateProfile = catchAsyncErrors(async (req, res, next) => {
     const userData = { name: req.body.name };
     if (req.body.avatar && req.body.avatar !== '') {
         const user = await User.findById(req.user.id);
+        if (!user) {
+            return next(new ErrorHandler('Không tìm thấy người dùng', 404));
+        }
+
         const publicId = user.avatar.publicId;
         if (publicId) {
             await cloudinary.uploader.destroy(publicId);
@@ -34,6 +38,11 @@ export const handleUpdateProfile = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const handleUpdateEmail = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.user.ud);
+    if (!user) {
+        return next(new ErrorHandler('Không tìm thấy người dùng', 404));
+    }
+
     await User.findByIdAndUpdate(req.user.id, { email: req.body.email }, {
         runValidators: true,
     });
@@ -46,6 +55,10 @@ export const handleUpdateEmail = catchAsyncErrors(async (req, res, next) => {
 
 export const handleUpdatePassword = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.user.id).select('+password');
+
+    if (!user) {
+        return next(new ErrorHandler('Không tìm thấy người dùng', 404));
+    }
 
     const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
     if (!isPasswordMatched) {
