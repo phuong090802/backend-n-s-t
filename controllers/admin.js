@@ -42,7 +42,7 @@ export const handleDeleteUser = catchAsyncErrors(async (req, res, next) => {
 export const handleGetAllUser = catchAsyncErrors(async (req, res, next) => {
     const size = 4;
 
-    const userQuery = User.find({ _id: { $ne: req.user._id } }).select('-__v -resetPasswordExpire -resetPasswordToken');
+    const userQuery = User.find({ _id: { $ne: req.user._id } }).select('-__v -resetPasswordExpire -resetPasswordToken -updatedAt');
 
     const apiFeatures = new UserAPIFeatures(userQuery, req.query)
         .search();
