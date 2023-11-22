@@ -4,7 +4,7 @@ const todoSchema = new Schema({
     name: {
         type: String,
         required: [true, 'Vui lòng nhập tên công việc'],
-        unique: [true, 'Công việc đã tồn tại']
+        unique: true, 
     },
     description: {
         type: String

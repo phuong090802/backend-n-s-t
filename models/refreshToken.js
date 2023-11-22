@@ -4,7 +4,7 @@ const refreshTokenSchema = new Schema({
     token: {
         type: String,
         required: true,
-        unique: [true, 'Token phải bị trùng']
+        unique: true, 
     },
     status: {
         type: Boolean,
