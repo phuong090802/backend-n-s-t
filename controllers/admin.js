@@ -2,6 +2,7 @@ import User from '../models/user.js';
 import catchAsyncErrors from '../middlewares/catchAsyncErrors.js';
 import { UserAPIFeatures } from '../utils/APIFeatures.js';
 import Todo from '../models/todo.js';
+import ErrorHandler from '../utils/errorHandler.js';
 
 
 export const handleGetUser = catchAsyncErrors(async (req, res, next) => {
