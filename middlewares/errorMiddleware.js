@@ -26,12 +26,12 @@ export default function errorMiddleware(err, req, res, next) {
     }
 
     if (err.name === 'JsonWebTokenError') {
-        const message = 'Xác thực thông thành công. Vui lòng đăng nhập lại';
+        const message = 'Xác thực không thành công. Vui lòng đăng nhập lại';
         error = new ErrorHandler(message, 401);
     }
 
     if (err.name === 'TokenExpiredError') {
-        const message = 'Xác thực thông thành công. Vui lòng đăng nhập lại';
+        const message = 'Xác thực không thành công. Vui lòng đăng nhập lại';
         error = new ErrorHandler(message, 401);
     }
 
