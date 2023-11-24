@@ -4,13 +4,13 @@ import {
     handleDeleteUser,
     handleGetAllUser
 } from '../controllers/admin.js';
-import { isAdmin } from '../middlewares/auth.js';
+import { isNotIdAdmin } from '../middlewares/auth.js';
 
 const router = express.Router();
 
 router.route('/users/:id')
-    .get(isAdmin, handleGetUser)
-    .delete(isAdmin, handleDeleteUser)
+    .get(isNotIdAdmin, handleGetUser)
+    .delete(isNotIdAdmin, handleDeleteUser)
 
 router.get('/users/', handleGetAllUser)
 

@@ -4,7 +4,7 @@ const refreshTokenSchema = new Schema({
     token: {
         type: String,
         required: true,
-        unique: true, 
+        unique: true,
     },
     status: {
         type: Boolean,
@@ -23,6 +23,6 @@ const refreshTokenSchema = new Schema({
         required: [true, 'Thiếu thông tin người dùng'],
         ref: 'User'
     }
-}, { collection: 'refresh-tokens', timestamps: true });
+}, { collection: 'refresh-tokens' });
 
 export default model('RefreshToken', refreshTokenSchema);

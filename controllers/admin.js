@@ -3,6 +3,7 @@ import catchAsyncErrors from '../middlewares/catchAsyncErrors.js';
 import { UserAPIFeatures } from '../utils/APIFeatures.js';
 import Todo from '../models/todo.js';
 import ErrorHandler from '../utils/errorHandler.js';
+import RefreshToken from '../models/refreshToken.js';
 
 
 export const handleGetUser = catchAsyncErrors(async (req, res, next) => {
@@ -34,6 +35,7 @@ export const handleDeleteUser = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Không tìm thấy người dùng', 404));
     }
     await Todo.deleteMany({ user });
+    await RefreshToken.deleteMany({ user });
     await user.deleteOne();
     res.json({
         success: true,
