@@ -1,6 +1,7 @@
 import catchAsyncErrors from '../middlewares/catchAsyncErrors.js';
 import Todo from '../models/todo.js';
 import { ToDoAPIFeatures } from '../utils/APIFeatures.js';
+import formatVietnameseDate from '../utils/dateUtils.js';
 
 export const handleCreateTodo = catchAsyncErrors(async (req, res, next) => {
     const { name, description } = req.body;
@@ -35,9 +36,19 @@ export const handleGetAllTodo = catchAsyncErrors(async (req, res, next) => {
 
     todos = await apiFeaturesPagination.query;
 
+    const listTodo = todos.map(todo => ({
+        _id: todo._id,
+        name: todo.name,
+        description: todo.description,
+        status: todo.status,
+        createdAt: formatVietnameseDate(todo.createdAt.toJSON()),
+        updatedAt: formatVietnameseDate(todo.updatedAt.toJSON()),
+        user: todo.user
+    }));
+
     res.json({
         success: true,
-        todos,
+        todos: listTodo,
         size,
         count
     })

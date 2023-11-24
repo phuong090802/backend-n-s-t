@@ -4,7 +4,7 @@ import { UserAPIFeatures } from '../utils/APIFeatures.js';
 import Todo from '../models/todo.js';
 import ErrorHandler from '../utils/errorHandler.js';
 import RefreshToken from '../models/refreshToken.js';
-
+import formatVietnameseDate from '../utils/dateUtils.js';
 
 export const handleGetUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.params.id);
@@ -61,9 +61,17 @@ export const handleGetAllUser = catchAsyncErrors(async (req, res, next) => {
 
     users = await apiFeaturesPagination.query;
 
+    const listUser = users.map(user => ({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        createdAt: formatVietnameseDate(users.createdAt.toJSON())
+    }));
+
     res.json({
         success: true,
-        users,
+        users: listUser,
         size,
         count
     })
