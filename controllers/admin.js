@@ -66,7 +66,7 @@ export const handleGetAllUser = catchAsyncErrors(async (req, res, next) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        createdAt: formatVietnameseDate(users.createdAt.toJSON())
+        createdAt: formatVietnameseDate(user.createdAt.toJSON())
     }));
 
     res.json({
