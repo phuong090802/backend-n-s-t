@@ -61,9 +61,19 @@ export const handleGetTodo = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Không tìm thấy công việc', 404));
     }
 
+    const todoData = {
+        _id: todo._id,
+        name: todo.name,
+        description: todo.description,
+        status: todo.status,
+        createdAt: formatVietnameseDate(todo.createdAt.toJSON()),
+        updatedAt: formatVietnameseDate(todo.updatedAt.toJSON()),
+        user: todo.user
+    };
+
     res.json({
         success: true,
-        todo
+        todo: todoData
     })
 });
 
